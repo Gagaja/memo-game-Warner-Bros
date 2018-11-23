@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Atma:400,600,700&amp;subset=latin-ext" rel="stylesheet">
+    <link rel="stylesheet" href="animate.min.css">
+    <title>Memory game</title>
+    <style>
+        body {
+
+            height: 900px;
+            width: 100%;
+            padding: 50px 0;
+            background-image: url(bgd-img-100.jpg);
+            background-attachment: fixed;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            font-family: 'Atma', cursive, 'Arial';
+        }
+
+        .main-title {
+            text-align: center;
+            font-size: 47px;
+            color: #33ff00;
+            letter-spacing: 1px;
+            transition: all 1s;
+
+        }
+
+        .main-title:hover {
+            cursor: pointer;
+
+            text-shadow: 0 0 12px #ffff40;
+        }
+
+        .para {
+            text-align: center;
+            font-size: 24px;
+            color: #fff;
+            line-height: 1.6;
+            letter-spacing: 1px;
+            font-weight: 400;
+            color: #33ff00;
+
+        }
+
+        .animated {
+            animation-duration: 3s;
+        }
+
+        .aft {
+            animation: pulse 5s infinite;
+            border-bottom: 1px solid rgba(116, 116, 116, 0.300);
+        }
+
+
+
+
+        @keyframes pulse {
+            0% {
+                color: #ffff40;
+            }
+            25% {
+                color: #f80000;
+
+            }
+            50% {
+                color: #fff;
+            }
+            75% {
+                color: #00ffff;
+            }
+            100% {
+                color: #33ff00;
+            }
+        }
+
+        table {
+            margin: 50px auto;
+            border-collapse: collapse;
+        }
+
+        img {
+            width: 100%;
+            height: auto;
+        }
+
+        td {
+            padding: 6px;
+            background: #001101;
+            width: 100px;
+            height: 100px;
+            border: 4.5px solid #f1cd01;
+        }
+
+        td:hover {
+            cursor: pointer;
+            background: #990000;
+        }
+
+        #win {
+            text-align: center;
+            font-size: 30px;
+
+        }
+    </style>
+</head>
+<!-- Body contain the simple html table size 4 x 4. Every table cells contain photo and contain photos from array imgArray (randomly distibuted).
+ And every table cells suplied with click event (The index is from the function click) -->
+
+<body>
+    <h1 class="main-title animated fadeInDown">Warner Bros Memory game</h1>
+    <p class=" para animated fadeInRight">When you click on the fields in the table, you will discover the Warner Bros caracters.</p>
+    <p class=" para animated fadeInLeft">You need to find two identical Warner Bros caracters(photo).</p>
+    <p class=" para aft "> Let's play and good luck!!!</p>
+    
+
+
+    <table class="memory-field" id="img-field">
+        <tr>
+
+            <td onclick="clicks(0)">
+                <img id="cell-0" src="bugs bunny-100.jpg" alt="back">
+            </td>
+            <td onclick="clicks(1)">
+                <img id="cell-1" src="bugs bunny-100.jpg" alt="back">
+            </td>
+            <td onclick="clicks(2)">
+                <img id="cell-2" src="bugs bunny-100.jpg" alt="back">
+            </td>
+            <td onclick="clicks(3)">
+                <img id="cell-3" src="bugs bunny-100.jpg" alt="back">
+            </td>
+        </tr>
+        <tr>
+            <td onclick="clicks(4)">
+                <img id="cell-4" src="bugs bunny-100.jpg" alt="back">
+            </td>
+            <td onclick="clicks(5)">
+                <img id="cell-5" src="bugs bunny-100.jpg" alt="back">
+            </td>
+            <td onclick="clicks(6)">
+                <img id="cell-6" src="bugs bunny-100.jpg" alt="back">
+            </td>
+            <td onclick="clicks(7)">
+                <img id="cell-7" src="bugs bunny-100.jpg" alt="back">
+            </td>
+        </tr>
+        <tr>
+            <td onclick="clicks(8)">
+                <img id="cell-8" src="bugs bunny-100.jpg" alt="back">
+            </td>
+            <td onclick="clicks(9)">
+                <img id="cell-9" src="bugs bunny-100.jpg" alt="back">
+            </td>
+            <td onclick="clicks(10)">
+                <img id="cell-10" src="bugs bunny-100.jpg" alt="back">
+            </td>
+            <td onclick="clicks(11)">
+
+                <img id="cell-11" src="bugs bunny-100.jpg" alt="back">
+            </td>
+        </tr>
+        <tr>
+            <td onclick="clicks(12)">
+                <img id="cell-12" src="bugs bunny-100.jpg" alt="back">
+            </td>
+            <td onclick="clicks(13)">
+                <img id="cell-13" src="bugs bunny-100.jpg" alt="back">
+            </td>
+            <td onclick="clicks(14)">
+                <img id="cell-14" src="bugs bunny-100.jpg" alt="back">
+            </td>
+            <td onclick="clicks(15)">
+                <img id="cell-15" src="bugs bunny-100.jpg" alt="back">
+            </td>
+        </tr>
+    </table>
+
+
+    <p id="win"></p>
+
+
+    <script>
+
+        //Memory game where I used photo
+        //All photo I draw in Adobe Illustrator woth pen tool. Photos respresents Warner Bros caracters
+        //The goal of the game is to find two identical photos of Warner Bros  character photographs and  the game ends when all identical photos are found.
+        //You can repeat game on button F5 on keyboard.
+
+
+        // Define global variables
+
+        var numChoosenImg = 0;
+        var firstImage;               // First photo choosen
+        var secondImage;             // Second photo choosen
+        var hit = 0;
+        var back = "bugs bunny-100.jpg";   // This photo will be used when match is not found
+
+        // Create array with variable name imgArray from photos. Array contains 8 x 2 photos. (8 different photos, 8 pairs)
+
+        var imgArray = ["daca2-100.jpg", "dusko2-100.jpg", "sima2-100.jpg", "martin2-100.jpg",
+            "daca2-100.jpg", "dusko2-100.jpg", "sima2-100.jpg", "martin2-100.jpg", "daca-100.jpg",
+            "dusko-100.jpg", "sima-100.jpg", "martin-100.jpg", "daca-100.jpg", "dusko-100.jpg",
+            "sima-100.jpg", "martin-100.jpg"];
+
+        var s;
+
+        fisherYates();
+
+        // Two functions. One to start timer, and second to stop.
+        // The time is used when flipped over first photo if they do not match I set time for 555 ms.
+
+        function startTimer() {
+
+            s = setTimeout(control, 555);
+        }
+
+        function stopTimer() {
+
+            clearInterval(s);
+        }
+
+        function clicks(index) {
+
+            if (numChoosenImg == 0) {
+
+                firstImage = document.getElementById(`cell-${index}`);   // The first click will be the first photo choosen 
+                firstImage.src = imgArray[index];                        // The photos  src is from array (imgArray)
+                numChoosenImg = 1;                                       // The first choosen photo
+
+            } else {
+
+                secondImage = document.getElementById(`cell-${index}`);   // The second click will be the second photo choosen
+                numChoosenImg = 2;                                       // The secondfirst choosen photo
+                secondImage.src = imgArray[index];                      // The photos  src is from array (imgArray)
+                startTimer();
+            }
+        }
+        function control() {
+
+            stopTimer();
+
+            // Simmple snippet to check if is two choosen photos is the same
+            // If fisrt and second photos above, is the same , theh we have a choosen pair.
+
+            if (firstImage.src == secondImage.src) {
+                hit++;
+                numChoosenImg = 0;
+
+            } else if (firstImage.src !== secondImage.src) {
+
+                // If we do not have a match then return variable back
+                firstImage.src = back;
+                secondImage.src = back;
+                numChoosenImg = 0;
+
+
+            } if (hit == imgArray.length / 2) {
+
+                // If we find all pairs of photos then this messages will be writen in elemet with id win
+                document.getElementById('win').innerHTML = 'You are win press F5 for new game !!!';
+                document.getElementById('win').style.color = "#33ff00";
+            }
+        }
+
+        // With this function all photos will be shuffle wich is used.
+
+        function fisherYates() {
+
+            for (var flip = 0; flip < 100; flip++) {
+
+                var i = Math.floor(Math.random() * imgArray.length);
+                var j = Math.floor(Math.random() * imgArray.length);
+                var temp = imgArray[i];
+                imgArray[i] = imgArray[j];
+                imgArray[j] = temp;
+            }
+        }
+
+
+    </script>
+
+</body>
+
+</html>
